@@ -11,8 +11,8 @@ public class CreateBoard {
         gridSize = boardSize.charAt(2)-48;
         for (int i = 0; i < gridSize; i++) {
             puzzleNode node = new puzzleNode();
-            nodeGrid.addColumn(node.getPuzzleNode(), i);
-            nodeGrid.addRow(node.getPuzzleNode(), i);
+            nodeGrid.addColumn(i);
+            nodeGrid.addRow(i);
         }
     }
 
