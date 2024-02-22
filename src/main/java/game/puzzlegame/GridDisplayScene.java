@@ -48,8 +48,6 @@ public class GridDisplayScene {
             if (button.getText().equals(" ")) {
                 button.setText("X");
                 button.setTextFill(Color.RED);
-                // Disable all buttons in the same row and column
-                toggleRowColButtons(row, col, true, button);
             } else if (button.getText().equals("X")) {
                 button.setText("O");
                 button.setTextFill(Color.GREEN);
