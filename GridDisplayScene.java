@@ -49,12 +49,14 @@ public class GridDisplayScene {
 
         Tab storyTab = new Tab("Story");
         TextArea storyTextArea = new TextArea();
+        storyTextArea.setText(getStoryText());
         storyTab.setContent(storyTextArea);
         tabPane.getTabs().add(storyTab);
         storyTab.setClosable(false);
 
-        Tab notesTab = new Tab("Notes");
+        Tab notesTab = new Tab("Notes ");
         TextArea notesTextArea = new TextArea();
+        notesTextArea.setText(getNotesText());
         notesTab.setContent(notesTextArea);
         tabPane.getTabs().add(notesTab);
         notesTab.setClosable(false);
@@ -79,20 +81,33 @@ public class GridDisplayScene {
         root.setRight(cluesBox);
         scene = new Scene(root, 800, 400);
     }
+    
+
 
     private String getCluesText() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Active Clues\n");
-        sb.append("1. The one with 250 genes " +
+        StringBuilder cb = new StringBuilder();
+        cb.append("Active Clues\n");
+        cb.append("1. The one with 250 genes " +
                 "\nwas sequenced by Dr. Garza.\n");
-        sb.append("2. B. mangeris was either the one " +
+        cb.append("2. B. mangeris was either the one " +
                 "\nwith 750 genes or the bacteria sequenced by Dr. Ingram.\n");
-        sb.append("3. E. carolinus has 250 fewer genes than " +
+        cb.append("3. E. carolinus has 250 fewer genes than " +
                 "\nthe organism sequenced by Dr. Ortiz.\n");
-        sb.append("4. L. dyson has 500 genes.\n");
-        sb.append("5. The one sequenced by Dr. Acosta " +
+        cb.append("4. L. dyson has 500 genes.\n");
+        cb.append("5. The one sequenced by Dr. Acosta " +
                 "\nhas 250 fewer genes than B. mangeris.\n");
+        return cb.toString();
+    }
+    private String getStoryText() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Backstory and Goal \n");
         return sb.toString();
+    }
+    private String getNotesText() {
+        StringBuilder nb = new StringBuilder();
+        nb.append("Use this area to record notes that" +
+                "\n may assist you in solving the puzzle. ");
+        return  nb.toString();
     }
 
 
