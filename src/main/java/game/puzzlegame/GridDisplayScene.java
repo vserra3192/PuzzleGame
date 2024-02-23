@@ -3,21 +3,40 @@ package game.puzzlegame;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
 public class GridDisplayScene {
     private GameButton[][] buttons;
+    private String[][] answerSheet;
     private Scene scene;
     private int rows;
     private int cols;
+    private Button clearErrorsButton;
+    private Button startOverButton;
 
     public GridDisplayScene(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
         buttons = new GameButton[rows][cols];
+        answerSheet = new String[rows][cols];
+        startOverButton = new Button("Start Over");
+        startOverButton.setOnAction(e -> onStartOver());
+        clearErrorsButton = new Button("clear Errors");
+        clearErrorsButton.setOnAction(e -> onClearErrors());
         initializeUI();
+    }
+
+    private void onStartOver() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                buttons[i][j].setText(" ");
+                buttons[i][j].setDisable(false);
+            }
+        }
     }
 
     private void initializeUI() {
@@ -25,7 +44,6 @@ public class GridDisplayScene {
         root.setPadding(new Insets(15, 20, 15, 20));
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.TOP_LEFT);
-
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 GameButton btn = new GameButton(row, col, this);
@@ -33,9 +51,35 @@ public class GridDisplayScene {
                 buttons[row][col] = btn;
             }
         }
-
+        HBox buttonsHolder = new HBox(startOverButton,clearErrorsButton);
+        root.setBottom(buttonsHolder);
         root.setCenter(grid);
         scene = new Scene(root, 600, 400);
+    }
+    //creates an answer sheet used to clear errors and check if answers given are correct. TEMPORARY
+    private void createAnswerSheet(){
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                answerSheet[i][j] = "X";
+            }
+        }
+        answerSheet[0][0] = "O";
+        answerSheet[1][1] = "O";
+        answerSheet[2][2] = "O";
+        answerSheet[3][3] = "O";
+    }
+    //for each button in the grid, it compares its value to the answer sheet "grid" (a 2d array with the answers)
+    //and clears the answers if that are incorrect.
+    private void onClearErrors() {
+        createAnswerSheet();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if(!buttons[i][j].getText().equals(answerSheet[i][j])){
+                    buttons[i][j].setText(" ");
+                    buttons[i][j].setDisable(false);
+                }
+            }
+        }
     }
 
     public void handleButtonAction(GameButton button) {
