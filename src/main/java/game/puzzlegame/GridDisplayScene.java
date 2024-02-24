@@ -13,6 +13,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.VBox;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 
 public class GridDisplayScene {
     private GameButton[][] buttons;
@@ -23,10 +27,13 @@ public class GridDisplayScene {
     private Button clearErrorsButton;
     private Button startOverButton;
     private VBox cluesBox;
-
-
+    private Scanner scan;
+    private int numClues = 0;
+    private File file = new File("src/main/resources/game/puzzlegame/Game.Data");
+    private String cluesText, storyText;
 
     public GridDisplayScene(int rows, int cols) {
+        getGameData();
         this.rows = rows;
         this.cols = cols;
         buttons = new GameButton[rows][cols];
@@ -59,14 +66,14 @@ public class GridDisplayScene {
         TabPane tabPane = new TabPane();
         Tab clueTab = new Tab("Clues");
         TextArea clueTextArea = new TextArea();
-        clueTextArea.setText(getCluesText());
+        clueTextArea.setText(cluesText);
         clueTab.setContent(clueTextArea);
         tabPane.getTabs().add(clueTab);
         clueTab.setClosable(false);
 
         Tab storyTab = new Tab("Story");
         TextArea storyTextArea = new TextArea();
-        storyTextArea.setText(getStoryText());
+        storyTextArea.setText(storyText);
         storyTab.setContent(storyTextArea);
         tabPane.getTabs().add(storyTab);
         storyTab.setClosable(false);
@@ -93,35 +100,36 @@ public class GridDisplayScene {
                 buttons[row][col] = btn;
             }
         }
-        HBox buttonsHolder = new HBox(startOverButton,clearErrorsButton);
+        HBox buttonsHolder = new HBox(startOverButton, clearErrorsButton);
         root.setBottom(buttonsHolder);
         root.setCenter(grid);
         root.setRight(cluesBox);
         scene = new Scene(root, 800, 400);
     }
 
-
-
-    private String getCluesText() {
-        //where clues are located
-        StringBuilder cb = new StringBuilder();
-        cb.append("Active Clues\n");
-        cb.append("1. The one with 250 genes " +
-                "\nwas sequenced by Dr. Garza.\n");
-        cb.append("2. B. mangeris was either the one " +
-                "\nwith 750 genes or the bacteria sequenced by Dr. Ingram.\n");
-        cb.append("3. E. carolinus has 250 fewer genes than " +
-                "\nthe organism sequenced by Dr. Ortiz.\n");
-        cb.append("4. L. dyson has 500 genes.\n");
-        cb.append("5. The one sequenced by Dr. Acosta " +
-                "\nhas 250 fewer genes than B. mangeris.\n");
-        return cb.toString();
-    }
-    private String getStoryText() {
-        //story location
-        StringBuilder sb = new StringBuilder();
-        sb.append("Backstory and Goal \n");
-        return sb.toString();
+    private void getGameData(){
+        StringBuilder clueString = new StringBuilder("CLUES:\n");
+        StringBuilder storyString = new StringBuilder("Story:\n");
+        try {
+            scan = new Scanner(file);
+            String line = scan.nextLine();
+            if (line.equals("clues")){
+                while(!line.equals("story")){
+                    line = scan.nextLine();
+                    clueString.append(line).append("\n");
+                }
+                while (scan.hasNext()){
+                    line = scan.nextLine();
+                    storyString.append(line).append("\n");
+                }
+            }else{
+                System.out.println("Not correct format");
+            }
+        }catch (FileNotFoundException e){
+            System.out.println("File not found");
+        }
+        cluesText = clueString.toString();
+        storyText = storyString.toString();
     }
     private String getNotesText() {
         //write down notes
