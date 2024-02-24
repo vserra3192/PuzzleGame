@@ -1,199 +1,106 @@
 package game.puzzlegame;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.layout.VBox;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 
 public class GridDisplayScene {
-    private GameButton[][] buttons;
-    private String[][] answerSheet;
     private Scene scene;
-    private int rows;
-    private int cols;
-    private Button clearErrorsButton;
-    private Button startOverButton;
-    private VBox cluesBox;
-    private Scanner scan;
-    private int numClues = 0;
-    private File file = new File("src/main/resources/game/puzzlegame/Game.Data");
-    private String cluesText, storyText;
+    private int gridSize;
+    private int gridNumber;
+    private String difficultyLevel;
 
-    public GridDisplayScene(int rows, int cols) {
-        getGameData();
-        this.rows = rows;
-        this.cols = cols;
-        buttons = new GameButton[rows][cols];
-        answerSheet = new String[rows][cols];
-        startOverButton = new Button("Start Over");
-        startOverButton.setOnAction(e -> onStartOver());
-        clearErrorsButton = new Button("clear Errors");
-        clearErrorsButton.setOnAction(e -> onClearErrors());
-        initializeUI();
+    public GridDisplayScene(int gridSize, int gridNumber, String difficultyLevel) {
+        this.gridSize = gridSize;
+        this.gridNumber = gridNumber;
+        this.difficultyLevel = difficultyLevel;
+        initializeGrids();
     }
-    private void onStartOver() {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                buttons[i][j].setText(" ");
-                buttons[i][j].setDisable(false);
-            }
+    private void initializeGrids() {
+        Pane pane = new Pane();
+
+        for (int i = 0; i < gridNumber; i++) {
+            GridPane grid = createGridPane(i);
+            positionAndLabelGrid(pane, grid, i);
+            pane.getChildren().add(grid);
         }
+
+        scene = new Scene(pane, 800, 600);
     }
-    private void initializeUI() {
-        BorderPane root = new BorderPane();
-        root.setPadding(new Insets(15, 20, 15, 20));
+    private GridPane createGridPane(int gridIndex) {
         GridPane grid = new GridPane();
-        grid.setAlignment(Pos.TOP_LEFT);
 
-        cluesBox = new VBox();
-        cluesBox.setPrefWidth(300); // Set preferred width
-        cluesBox.setAlignment(Pos.TOP_CENTER);
-
-        // Create tabs for each panel
-        TabPane tabPane = new TabPane();
-        Tab clueTab = new Tab("Clues");
-        TextArea clueTextArea = new TextArea();
-        clueTextArea.setText(cluesText);
-        clueTab.setContent(clueTextArea);
-        tabPane.getTabs().add(clueTab);
-        clueTab.setClosable(false);
-
-        Tab storyTab = new Tab("Story");
-        TextArea storyTextArea = new TextArea();
-        storyTextArea.setText(storyText);
-        storyTab.setContent(storyTextArea);
-        tabPane.getTabs().add(storyTab);
-        storyTab.setClosable(false);
-
-        Tab notesTab = new Tab("Notes ");
-        TextArea notesTextArea = new TextArea();
-        notesTextArea.setText(getNotesText());
-        notesTab.setContent(notesTextArea);
-        tabPane.getTabs().add(notesTab);
-        notesTab.setClosable(false);
-
-        Tab answerTab = new Tab("Answer");
-        TextArea answerTextArea = new TextArea();
-        answerTab.setContent(answerTextArea);
-        tabPane.getTabs().add(answerTab);
-        answerTab.setClosable(false);
-
-        cluesBox.getChildren().add(tabPane);
-
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                GameButton btn = new GameButton(row, col, this);
+        for (int row = 0; row < gridSize; row++) {
+            for (int col = 0; col < gridSize; col++) {
+                GameButton btn = new GameButton(row, col, grid);
+                btn.setOnAction(e -> handleButtonAction(btn, gridIndex));
                 grid.add(btn, col, row);
-                buttons[row][col] = btn;
             }
         }
-        HBox buttonsHolder = new HBox(startOverButton, clearErrorsButton);
-        root.setBottom(buttonsHolder);
-        root.setCenter(grid);
-        root.setRight(cluesBox);
-        scene = new Scene(root, 800, 400);
+        return grid;
     }
+    private void positionAndLabelGrid(Pane pane, GridPane grid, int gridIndex) {
+        // Existing positioning logic
+        switch (gridIndex) {
+            case 0:
+                grid.setLayoutX(150);
+                grid.setLayoutY(150);
+                break;
+            case 1:
+                grid.setLayoutX(351);
+                grid.setLayoutY(150);
+                break;
+            case 2:
+                grid.setLayoutX(150);
+                grid.setLayoutY(351);
+                break;
+        }
 
-    private void getGameData(){
-        StringBuilder clueString = new StringBuilder("CLUES:\n");
-        StringBuilder storyString = new StringBuilder("Story:\n");
-        try {
-            scan = new Scanner(file);
-            String line = scan.nextLine();
-            if (line.equals("clues")){
-                while(!line.equals("story")){
-                    line = scan.nextLine();
-                    clueString.append(line).append("\n");
-                }
-                while (scan.hasNext()){
-                    line = scan.nextLine();
-                    storyString.append(line).append("\n");
-                }
-            }else{
-                System.out.println("Not correct format");
+        // Labeling logic
+        for (int i = 0; i < 4; i++) {
+            if (gridIndex == 0 || gridIndex == 2) {
+                Label rowLabel = new Label("Row " + (i + 1));
+                rowLabel.setLayoutX(grid.getLayoutX() - 50);
+                rowLabel.setLayoutY(grid.getLayoutY() + i * 50 + 25);
+                pane.getChildren().add(rowLabel);
             }
-        }catch (FileNotFoundException e){
-            System.out.println("File not found");
-        }
-        cluesText = clueString.toString();
-        storyText = storyString.toString();
-    }
-    private String getNotesText() {
-        //write down notes
-        StringBuilder nb = new StringBuilder();
-        nb.append("Use this area to record notes that" +
-                "\n may assist you in solving the puzzle. ");
-        return  nb.toString();
-    }
-    //creates an answer sheet used to clear errors and check if answers given are correct. TEMPORARY
-    private void createAnswerSheet(){
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                answerSheet[i][j] = "X";
-            }
-        }
-        answerSheet[0][0] = "O";
-        answerSheet[1][1] = "O";
-        answerSheet[2][2] = "O";
-        answerSheet[3][3] = "O";
-    }
-    //for each button in the grid, it compares its value to the answer sheet "grid" (a 2d array with the answers)
-    //and clears the answers if that are incorrect.
-    private void onClearErrors() {
-        createAnswerSheet();
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if(!buttons[i][j].getText().equals(answerSheet[i][j])){
-                    buttons[i][j].setText(" ");
-                    buttons[i][j].setDisable(false);
-                }
+            if (gridIndex == 0 || gridIndex == 1) {
+                Label colLabel = new Label("Col " + (i + 1));
+                colLabel.setLayoutX(grid.getLayoutX() + i * 50 + 15);
+                colLabel.setLayoutY(grid.getLayoutY() - 30);
+                pane.getChildren().add(colLabel);
             }
         }
     }
-
-    public void handleButtonAction(GameButton button) {
-        int row = button.getRow();
-        int col = button.getCol();
-
-        // Toggle button state and update appearance
-        if (!button.getText().equals("O")) {
-            // If not currently "O", it can be toggled freely
-            if (button.getText().equals(" ")) {
-                button.setText("X");
-                button.setTextFill(Color.RED);
-            } else if (button.getText().equals("X")) {
-                button.setText("O");
-                button.setTextFill(Color.GREEN);
-                // Mark all in row/col as X and disable
-                toggleRowColButtons(row, col, true, button);
-            }
+    private void handleButtonAction(GameButton button, int gridIndex) {
+        // Toggle button state
+        if (button.getText().equals(" ")) {
+            button.setText("X");
+            button.setTextFill(Color.RED);
+        } else if (button.getText().equals("X")) {
+            button.setText("O");
+            button.setTextFill(Color.GREEN);
+            toggleRowColButtons(button.getGridPane(), button.getRow(), button.getCol(), true, button);
         } else {
-            // If currently "O", toggling back to initial state and re-enable all in row/col if applicable
             button.setText(" ");
-            toggleRowColButtons(row, col, false, button); // Re-enable and clear Xs if not affected by another O
+            button.setTextFill(Color.BLACK);
+            toggleRowColButtons(button.getGridPane(), button.getRow(), button.getCol(), false, button);
         }
     }
-
-    private void toggleRowColButtons(int row, int col, boolean disable, GameButton originButton) {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                GameButton btn = buttons[i][j];
+    private void toggleRowColButtons(GridPane grid, int row, int col, boolean disable, GameButton originButton) {
+        for (Node node : grid.getChildren()) {
+            if (node instanceof GameButton) {
+                GameButton btn = (GameButton) node;
                 if (btn == originButton) continue; // Skip the origin button
 
-                if (i == row || j == col) {
+                int btnRow = GridPane.getRowIndex(btn);
+                int btnCol = GridPane.getColumnIndex(btn);
+
+                if (btnRow == row || btnCol == col) {
                     if (disable) {
                         if (!btn.getText().equals("O")) { // Don't disable if it's an "O"
                             btn.setText("X");
@@ -201,8 +108,8 @@ public class GridDisplayScene {
                             btn.setDisable(true);
                         }
                     } else {
-                        // Re-enable if not in line with another "O"
-                        if (!isInLineWithAnotherO(i, j, originButton)) {
+                        // Only re-enable if not in line with another "O"
+                        if (!isInLineWithAnotherO(grid, btnRow, btnCol, originButton)) {
                             btn.setText(" ");
                             btn.setDisable(false);
                         }
@@ -211,22 +118,22 @@ public class GridDisplayScene {
             }
         }
     }
+    private boolean isInLineWithAnotherO(GridPane grid, int row, int col, GameButton originButton) {
+        for (Node node : grid.getChildren()) {
+            if (node instanceof GameButton) {
+                GameButton btn = (GameButton) node;
+                int btnRow = GridPane.getRowIndex(btn);
+                int btnCol = GridPane.getColumnIndex(btn);
 
-    private boolean isInLineWithAnotherO(int row, int col, GameButton originButton) {
-        // Check the row and column for another "O", excluding the origin button
-        for (int i = 0; i < rows; i++) {
-            if (buttons[row][i].getText().equals("O") && buttons[row][i] != originButton) return true;
-        }
-        for (int j = 0; j < cols; j++) {
-            if (buttons[j][col].getText().equals("O") && buttons[j][col] != originButton) return true;
+                if ((btnRow == row || btnCol == col) && btn.getText().equals("O") && btn != originButton) {
+                    return true;
+                }
+            }
         }
         return false;
     }
 
-
     public Scene getScene() {
         return scene;
     }
-
-
 }
