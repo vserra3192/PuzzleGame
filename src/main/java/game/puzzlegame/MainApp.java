@@ -20,8 +20,22 @@ public class MainApp extends Application {
         primaryStage.show();
     }
 
-    public void showGridDisplayScene(String gridSize, String difficultyLevel) {
-        GridDisplayScene gridDisplayScene = new GridDisplayScene(4,4 );
+    public void showGridDisplayScene(String gridDimension, String difficultyLevel) {
+        String[] parts = gridDimension.split("x");
+
+        int gridNumber;
+        int gridSize = Integer.parseInt(parts[1]);
+
+        if ("3".equals(parts[0])) {
+            gridNumber = 3;
+        } else if ("4".equals(parts[0])) {
+            gridNumber = 6;
+        } else {
+            System.out.println("Unexpected value for parts[0]: " + parts[0]);
+            gridNumber = -1;
+        }
+
+        GridDisplayScene gridDisplayScene = new GridDisplayScene(gridSize,gridNumber,difficultyLevel);
         primaryStage.setScene(gridDisplayScene.getScene());
         primaryStage.setTitle("Enjoy the game");
         primaryStage.show();

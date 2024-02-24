@@ -3,20 +3,20 @@ package game.puzzlegame;
 import javafx.scene.control.Button;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.layout.GridPane;
 
 public class GameButton extends Button {
     private int row;
     private int col;
-    private GridDisplayScene gridDisplayScene; // This will manage the grid
+    private GridPane grid; // Reference to its parent GridPane
 
-    public GameButton(int row, int col, GridDisplayScene gridDisplayScene) {
+    public GameButton(int row, int col, GridPane grid) {
         super(" ");
         this.row = row;
         this.col = col;
-        this.gridDisplayScene = gridDisplayScene;
+        this.grid = grid;
         setPrefSize(50, 50);
         setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        setOnAction(e -> gridDisplayScene.handleButtonAction(this));
     }
 
     public int getRow() {
@@ -25,5 +25,9 @@ public class GameButton extends Button {
 
     public int getCol() {
         return col;
+    }
+
+    public GridPane getGridPane() { // Provide access to the GridPane
+        return grid;
     }
 }
