@@ -11,6 +11,20 @@ import javafx.scene.paint.Color;
 
 
 public class GridDisplayScene {
+
+    // previous Attributes
+    /*
+        getGameData();
+        this.rows = rows;
+        this.cols = cols;
+        buttons = new GameButton[rows][cols];
+        answerSheet = new String[rows][cols];
+        startOverButton = new Button("Start Over");
+        startOverButton.setOnAction(e -> onStartOver());
+        clearErrorsButton = new Button("clear Errors");
+        clearErrorsButton.setOnAction(e -> onClearErrors());
+        initializeUI();
+     */
     private Scene scene;
     private int gridSize;
     private int gridNumber;
@@ -22,7 +36,106 @@ public class GridDisplayScene {
         this.difficultyLevel = difficultyLevel;
         initializeUI();
     }
+
+
+    //getGameData method
+    /*
+        private void getGameData(){
+        StringBuilder clueString = new StringBuilder("CLUES:\n");
+        StringBuilder storyString = new StringBuilder("Story:\n");
+        try {
+            scan = new Scanner(file);
+            String line = scan.nextLine();
+            if (line.equals("clues")){
+                while(!line.equals("story")){
+                    line = scan.nextLine();
+                    clueString.append(line).append("\n");
+                }
+                while (scan.hasNext()){
+                    line = scan.nextLine();
+                    storyString.append(line).append("\n");
+                }
+            }else{
+                System.out.println("Not correct format");
+            }
+        }catch (FileNotFoundException e){
+            System.out.println("File not found");
+        }
+        cluesText = clueString.toString();
+        storyText = storyString.toString();
+    }
+     */
+
+    //getNotesText method
+    /*
+        private String getNotesText() {
+        //write down notes
+        StringBuilder nb = new StringBuilder();
+        nb.append("Use this area to record notes that" +
+                "\n may assist you in solving the puzzle. ");
+        return  nb.toString();
+    }
+     */
     private void initializeUI() {
+
+        //Previous version of initializeUI
+        /*
+            private void initializeUI() {
+        BorderPane root = new BorderPane();
+        root.setPadding(new Insets(15, 20, 15, 20));
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.TOP_LEFT);
+
+        cluesBox = new VBox();
+        cluesBox.setPrefWidth(300); // Set preferred width
+        cluesBox.setAlignment(Pos.TOP_CENTER);
+
+        // Create tabs for each panel
+        TabPane tabPane = new TabPane();
+        Tab clueTab = new Tab("Clues");
+        TextArea clueTextArea = new TextArea();
+        clueTextArea.setText(cluesText);
+        clueTab.setContent(clueTextArea);
+        tabPane.getTabs().add(clueTab);
+        clueTab.setClosable(false);
+
+        Tab storyTab = new Tab("Story");
+        TextArea storyTextArea = new TextArea();
+        storyTextArea.setText(storyText);
+        storyTab.setContent(storyTextArea);
+        tabPane.getTabs().add(storyTab);
+        storyTab.setClosable(false);
+
+        Tab notesTab = new Tab("Notes ");
+        TextArea notesTextArea = new TextArea();
+        notesTextArea.setText(getNotesText());
+        notesTab.setContent(notesTextArea);
+        tabPane.getTabs().add(notesTab);
+        notesTab.setClosable(false);
+
+        Tab answerTab = new Tab("Answer");
+        TextArea answerTextArea = new TextArea();
+        answerTab.setContent(answerTextArea);
+        tabPane.getTabs().add(answerTab);
+        answerTab.setClosable(false);
+
+        cluesBox.getChildren().add(tabPane);
+
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                GameButton btn = new GameButton(row, col, this);
+                grid.add(btn, col, row);
+                buttons[row][col] = btn;
+            }
+        }
+        HBox buttonsHolder = new HBox(startOverButton, clearErrorsButton);
+        root.setBottom(buttonsHolder);
+        root.setCenter(grid);
+        root.setRight(cluesBox);
+        scene = new Scene(root, 800, 400);
+    }
+         */
+
         Pane root = new Pane();
 
         for (int i = 0; i < gridNumber; i++) {
@@ -69,19 +182,50 @@ public class GridDisplayScene {
         hintButton.setLayoutX(200);
         hintButton.setLayoutY(650);
 
-
-
-
         scene = new Scene(root, 1000, 700);
     }
 
     private void startOver() {
+        /*
+                for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                buttons[i][j].setText(" ");
+                buttons[i][j].setDisable(false);
+            }
+        }
+         */
     }
 
     private void giveHint() {
     }
 
     private void clearErrors() {
+        /*
+            private void createAnswerSheet(){
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                answerSheet[i][j] = "X";
+            }
+        }
+        answerSheet[0][0] = "O";
+        answerSheet[1][1] = "O";
+        answerSheet[2][2] = "O";
+        answerSheet[3][3] = "O";
+    }
+    //for each button in the grid, it compares its value to the answer sheet "grid" (a 2d array with the answers)
+    //and clears the answers if that are incorrect.
+    private void onClearErrors() {
+        createAnswerSheet();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if(!buttons[i][j].getText().equals(answerSheet[i][j])){
+                    buttons[i][j].setText(" ");
+                    buttons[i][j].setDisable(false);
+                }
+            }
+        }
+    }
+         */
 
     }
 
@@ -128,13 +272,15 @@ public class GridDisplayScene {
         for (int i = 0; i < 4; i++) {
             if (gridIndex == 0 || gridIndex == 2) {
                 Label rowLabel = new Label("Row " + (i + 1));
-                rowLabel.setLayoutX(grid.getLayoutX() - 50); // Adjust this if needed
-                rowLabel.setLayoutY(grid.getLayoutY() + i * buttonSize + halfButtonSize - rowLabel.getHeight() / 2);
+                rowLabel.setPrefSize(150, 50);
+                rowLabel.setLayoutX(50); // Adjust this if needed
+                rowLabel.setLayoutY(grid.getLayoutY() + i * buttonSize );
                 rowLabel.setStyle(labelStyle);
                 root.getChildren().add(rowLabel);
             }
             if (gridIndex == 0 || gridIndex == 1) {
                 Label colLabel = new Label("Col " + (i + 1));
+                colLabel.setPrefSize(200, 50);
                 colLabel.setLayoutX(grid.getLayoutX() + i * buttonSize + halfButtonSize - colLabel.getWidth() / 2);
                 colLabel.setLayoutY(grid.getLayoutY() - 30); // Adjust this if needed
                 colLabel.setStyle(labelStyle);
