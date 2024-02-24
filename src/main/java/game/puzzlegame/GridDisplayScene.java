@@ -4,10 +4,15 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.layout.VBox;
+
 
 public class GridDisplayScene {
     private GameButton[][] buttons;
@@ -17,6 +22,9 @@ public class GridDisplayScene {
     private int cols;
     private Button clearErrorsButton;
     private Button startOverButton;
+    private VBox cluesBox;
+
+
 
     public GridDisplayScene(int rows, int cols) {
         this.rows = rows;
@@ -29,7 +37,6 @@ public class GridDisplayScene {
         clearErrorsButton.setOnAction(e -> onClearErrors());
         initializeUI();
     }
-
     private void onStartOver() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -38,12 +45,47 @@ public class GridDisplayScene {
             }
         }
     }
-
     private void initializeUI() {
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(15, 20, 15, 20));
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.TOP_LEFT);
+
+        cluesBox = new VBox();
+        cluesBox.setPrefWidth(300); // Set preferred width
+        cluesBox.setAlignment(Pos.TOP_CENTER);
+
+        // Create tabs for each panel
+        TabPane tabPane = new TabPane();
+        Tab clueTab = new Tab("Clues");
+        TextArea clueTextArea = new TextArea();
+        clueTextArea.setText(getCluesText());
+        clueTab.setContent(clueTextArea);
+        tabPane.getTabs().add(clueTab);
+        clueTab.setClosable(false);
+
+        Tab storyTab = new Tab("Story");
+        TextArea storyTextArea = new TextArea();
+        storyTextArea.setText(getStoryText());
+        storyTab.setContent(storyTextArea);
+        tabPane.getTabs().add(storyTab);
+        storyTab.setClosable(false);
+
+        Tab notesTab = new Tab("Notes ");
+        TextArea notesTextArea = new TextArea();
+        notesTextArea.setText(getNotesText());
+        notesTab.setContent(notesTextArea);
+        tabPane.getTabs().add(notesTab);
+        notesTab.setClosable(false);
+
+        Tab answerTab = new Tab("Answer");
+        TextArea answerTextArea = new TextArea();
+        answerTab.setContent(answerTextArea);
+        tabPane.getTabs().add(answerTab);
+        answerTab.setClosable(false);
+
+        cluesBox.getChildren().add(tabPane);
+
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 GameButton btn = new GameButton(row, col, this);
@@ -54,7 +96,39 @@ public class GridDisplayScene {
         HBox buttonsHolder = new HBox(startOverButton,clearErrorsButton);
         root.setBottom(buttonsHolder);
         root.setCenter(grid);
-        scene = new Scene(root, 600, 400);
+        root.setRight(cluesBox);
+        scene = new Scene(root, 800, 400);
+    }
+
+
+
+    private String getCluesText() {
+        //where clues are located
+        StringBuilder cb = new StringBuilder();
+        cb.append("Active Clues\n");
+        cb.append("1. The one with 250 genes " +
+                "\nwas sequenced by Dr. Garza.\n");
+        cb.append("2. B. mangeris was either the one " +
+                "\nwith 750 genes or the bacteria sequenced by Dr. Ingram.\n");
+        cb.append("3. E. carolinus has 250 fewer genes than " +
+                "\nthe organism sequenced by Dr. Ortiz.\n");
+        cb.append("4. L. dyson has 500 genes.\n");
+        cb.append("5. The one sequenced by Dr. Acosta " +
+                "\nhas 250 fewer genes than B. mangeris.\n");
+        return cb.toString();
+    }
+    private String getStoryText() {
+        //story location
+        StringBuilder sb = new StringBuilder();
+        sb.append("Backstory and Goal \n");
+        return sb.toString();
+    }
+    private String getNotesText() {
+        //write down notes
+        StringBuilder nb = new StringBuilder();
+        nb.append("Use this area to record notes that" +
+                "\n may assist you in solving the puzzle. ");
+        return  nb.toString();
     }
     //creates an answer sheet used to clear errors and check if answers given are correct. TEMPORARY
     private void createAnswerSheet(){
@@ -146,5 +220,5 @@ public class GridDisplayScene {
         return scene;
     }
 
-    // Additional methods for managing button states and interactions
+
 }
