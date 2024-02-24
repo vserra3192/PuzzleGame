@@ -1,0 +1,113 @@
+{
+    "Clues": "Active Clues\n1. Jesus was 2 years older than Frank.\n2. The 25-year-old was either Eddie or the firefighter.\n3. Frank was the accountant.\n4. Randy was 1 year older than Jesus.\n5. Jesus was the musician.",
+    "Story": "Backstory and Goal\nKara recently moved to a new city, so last month she signed up for an online matchmaking service to meet some interesting new people in her area. Using only the clues below, match each of her dates to their age and occupation, and determine where each ended up taking Kara on their first date.\n\n\n\nRemember, as with all grid-based logic puzzles, no option in any category will ever be used more than once. If you get stuck or run into problems, try the \"Clear Errors\" button to remove any mistakes that might be present on the grid, or the \"Hint\" button to see the next logical step in the puzzle.",
+    "Content": {
+        "Grid1": {
+            "ColumnHeader": {
+                "text": "Dates",
+                "Columns": {
+                    "Col1": "Eddie",
+                    "Col2": "Frank",
+                    "Col3": "Jesus",
+                    "Col4": "Randy"
+                }
+            },
+            "RowHeader": {
+                "text": "Ages",
+                "Rows": {
+                    "Row1": "22",
+                    "Row2": "23",
+                    "Row3": "24",
+                    "Row4": "25"
+                }
+            }
+        },
+        "Grid2": {
+            "ColumnHeader": {
+                "text": "Professions",
+                "Columns": {
+                    "Col1": "accountant",
+                    "Col2": "boxer",
+                    "Col3": "firefighter",
+                    "Col4": "musician"
+                }
+            }
+        },
+        "Grid3": {
+            "RowHeader": {
+                "text": "professions",
+                "Rows": {
+                    "Row1": "accountant",
+                    "Row2": "boxer",
+                    "Row3": "firefighter",
+                    "Row4": "musician"
+                }
+            }
+        }
+    },
+    "Answers": {
+        "Grid1": [
+            {"row": 1, "col": 1, "value": "X"},
+            {"row": 1, "col": 2, "value": "O"},
+            {"row": 1, "col": 3, "value": "X"},
+            {"row": 1, "col": 4, "value": "X"},
+
+            {"row": 2, "col": 1, "value": "O"},
+            {"row": 2, "col": 2, "value": "X"},
+            {"row": 2, "col": 3, "value": "X"},
+            {"row": 2, "col": 4, "value": "X"},
+
+            {"row": 3, "col": 1, "value": "X"},
+            {"row": 3, "col": 2, "value": "X"},
+            {"row": 3, "col": 3, "value": "O"},
+            {"row": 3, "col": 4, "value": "X"},
+
+            {"row": 4, "col": 1, "value": "X"},
+            {"row": 4, "col": 2, "value": "X"},
+            {"row": 4, "col": 3, "value": "X"},
+            {"row": 4, "col": 4, "value": "O"}
+        ],
+        "Grid2": [
+            {"row": 1, "col": 1, "value": "O"},
+            {"row": 1, "col": 2, "value": "X"},
+            {"row": 1, "col": 3, "value": "X"},
+            {"row": 1, "col": 4, "value": "X"},
+
+            {"row": 2, "col": 1, "value": "X"},
+            {"row": 2, "col": 2, "value": "O"},
+            {"row": 2, "col": 3, "value": "X"},
+            {"row": 2, "col": 4, "value": "X"},
+
+            {"row": 3, "col": 1, "value": "X"},
+            {"row": 3, "col": 2, "value": "X"},
+            {"row": 3, "col": 3, "value": "X"},
+            {"row": 3, "col": 4, "value": "O"},
+
+            {"row": 4, "col": 1, "value": "X"},
+            {"row": 4, "col": 2, "value": "X"},
+            {"row": 4, "col": 3, "value": "O"},
+            {"row": 4, "col": 4, "value": "X"}
+        ],
+        "Grid3": [
+            {"row": 1, "col": 1, "value": "X"},
+            {"row": 1, "col": 2, "value": "O"},
+            {"row": 1, "col": 3, "value": "X"},
+            {"row": 1, "col": 4, "value": "X"},
+
+            {"row": 2, "col": 1, "value": "O"},
+            {"row": 2, "col": 2, "value": "X"},
+            {"row": 2, "col": 3, "value": "X"},
+            {"row": 2, "col": 4, "value": "X"},
+
+            {"row": 3, "col": 1, "value": "X"},
+            {"row": 3, "col": 2, "value": "X"},
+            {"row": 3, "col": 3, "value": "X"},
+            {"row": 3, "col": 4, "value": "O"},
+
+            {"row": 4, "col": 1, "value": "X"},
+            {"row": 4, "col": 2, "value": "X"},
+            {"row": 4, "col": 3, "value": "O"},
+            {"row": 4, "col": 4, "value": "X"}
+        ]
+    }
+}

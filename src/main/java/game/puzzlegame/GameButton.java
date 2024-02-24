@@ -8,7 +8,7 @@ import javafx.scene.layout.GridPane;
 public class GameButton extends Button {
     private int row;
     private int col;
-    private GridPane grid; // Reference to its parent GridPane
+    private GridPane grid;
 
     public GameButton(int row, int col, GridPane grid) {
         super(" ");
@@ -27,7 +27,7 @@ public class GameButton extends Button {
         return col;
     }
 
-    public GridPane getGridPane() { // Provide access to the GridPane
+    public GridPane getGridPane() {
         return grid;
     }
 }

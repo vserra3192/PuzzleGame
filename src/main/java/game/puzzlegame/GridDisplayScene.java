@@ -1,10 +1,12 @@
 package game.puzzlegame;
 
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 
@@ -18,18 +20,78 @@ public class GridDisplayScene {
         this.gridSize = gridSize;
         this.gridNumber = gridNumber;
         this.difficultyLevel = difficultyLevel;
-        initializeGrids();
+        initializeUI();
     }
-    private void initializeGrids() {
-        Pane pane = new Pane();
+    private void initializeUI() {
+        Pane root = new Pane();
 
         for (int i = 0; i < gridNumber; i++) {
             GridPane grid = createGridPane(i);
-            positionAndLabelGrid(pane, grid, i);
-            pane.getChildren().add(grid);
+            positionLabelandGrid(root, grid, i);
+            root.getChildren().add(grid);
         }
 
-        scene = new Scene(pane, 800, 600);
+        VBox sideBox = new VBox();
+        sideBox.setPrefWidth(400);
+        sideBox.setAlignment(Pos.TOP_LEFT);
+
+        TabPane tabPane = new TabPane();
+        tabPane.getTabs().add(createTab("Clues", "cluesText"));
+        tabPane.getTabs().add(createTab("Story", "storyText"));
+        tabPane.getTabs().add(createTab("Notes", "getNotesText()"));
+        tabPane.getTabs().add(createTab("Answer", ""));
+
+        sideBox.getChildren().add(tabPane);
+
+
+        Button clearErrorsButton = new Button("Clear Errors");
+        clearErrorsButton.setOnAction(e -> clearErrors());
+
+        Button hintButton = new Button("Hint");
+        hintButton.setOnAction((e -> giveHint()));
+
+        Button startOverButton = new Button("Start Over");
+        hintButton.setOnAction((e -> startOver()));
+
+        root.getChildren().add(sideBox);
+        sideBox.setLayoutX(700);
+        sideBox.setLayoutY(0);
+
+        root.getChildren().add(startOverButton);
+        startOverButton.setLayoutX(500);
+        startOverButton.setLayoutY(650);
+
+        root.getChildren().add(clearErrorsButton);
+        clearErrorsButton.setLayoutX(335);
+        clearErrorsButton.setLayoutY(650);
+
+        root.getChildren().add(hintButton);
+        hintButton.setLayoutX(200);
+        hintButton.setLayoutY(650);
+
+
+
+
+        scene = new Scene(root, 1000, 700);
+    }
+
+    private void startOver() {
+    }
+
+    private void giveHint() {
+    }
+
+    private void clearErrors() {
+
+    }
+
+    private Tab createTab(String title, String content){
+        Tab tab = new Tab(title);
+        TextArea textArea = new TextArea();
+        textArea.setText(content);
+        tab.setContent(textArea);
+        tab.setClosable(false);
+        return tab;
     }
     private GridPane createGridPane(int gridIndex) {
         GridPane grid = new GridPane();
@@ -43,8 +105,7 @@ public class GridDisplayScene {
         }
         return grid;
     }
-    private void positionAndLabelGrid(Pane pane, GridPane grid, int gridIndex) {
-        // Existing positioning logic
+    private void positionLabelandGrid(Pane root, GridPane grid, int gridIndex) {
         switch (gridIndex) {
             case 0:
                 grid.setLayoutX(150);
@@ -60,19 +121,25 @@ public class GridDisplayScene {
                 break;
         }
 
-        // Labeling logic
+        double buttonSize = 50;
+        double halfButtonSize = buttonSize / 2;
+        String labelStyle = "-fx-border-color: black; -fx-border-width: 2; -fx-padding: 4 4 4 4; -fx-background-color: white; -fx-alignment: center;";
+
         for (int i = 0; i < 4; i++) {
             if (gridIndex == 0 || gridIndex == 2) {
                 Label rowLabel = new Label("Row " + (i + 1));
-                rowLabel.setLayoutX(grid.getLayoutX() - 50);
-                rowLabel.setLayoutY(grid.getLayoutY() + i * 50 + 25);
-                pane.getChildren().add(rowLabel);
+                rowLabel.setLayoutX(grid.getLayoutX() - 50); // Adjust this if needed
+                rowLabel.setLayoutY(grid.getLayoutY() + i * buttonSize + halfButtonSize - rowLabel.getHeight() / 2);
+                rowLabel.setStyle(labelStyle);
+                root.getChildren().add(rowLabel);
             }
             if (gridIndex == 0 || gridIndex == 1) {
                 Label colLabel = new Label("Col " + (i + 1));
-                colLabel.setLayoutX(grid.getLayoutX() + i * 50 + 15);
-                colLabel.setLayoutY(grid.getLayoutY() - 30);
-                pane.getChildren().add(colLabel);
+                colLabel.setLayoutX(grid.getLayoutX() + i * buttonSize + halfButtonSize - colLabel.getWidth() / 2);
+                colLabel.setLayoutY(grid.getLayoutY() - 30); // Adjust this if needed
+                colLabel.setStyle(labelStyle);
+                colLabel.setRotate(90);
+                root.getChildren().add(colLabel);
             }
         }
     }
