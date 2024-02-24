@@ -1,105 +1,73 @@
 package game.puzzlegame;
 
-import javafx.scene.Node;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 public class GridDisplayScene {
+    private GameButton[][] buttons;
     private Scene scene;
-    private int gridSize;
-    private int gridNumber;
-    private String difficultyLevel;
+    private int rows;
+    private int cols;
 
-    public GridDisplayScene(int gridSize, int gridNumber, String difficultyLevel) {
-        this.gridSize = gridSize;
-        this.gridNumber = gridNumber;
-        this.difficultyLevel = difficultyLevel;
-        initializeGrids();
+    public GridDisplayScene(int rows, int cols) {
+        this.rows = rows;
+        this.cols = cols;
+        buttons = new GameButton[rows][cols];
+        initializeUI();
     }
-    private void initializeGrids() {
-        Pane pane = new Pane();
 
-        for (int i = 0; i < gridNumber; i++) {
-            GridPane grid = createGridPane(i);
-            positionAndLabelGrid(pane, grid, i);
-            pane.getChildren().add(grid);
-        }
-
-        scene = new Scene(pane, 800, 600); // Adjust the scene size as needed
-    }
-    private GridPane createGridPane(int gridIndex) {
+    private void initializeUI() {
+        BorderPane root = new BorderPane();
+        root.setPadding(new Insets(15, 20, 15, 20));
         GridPane grid = new GridPane();
+        grid.setAlignment(Pos.TOP_LEFT);
 
-        for (int row = 0; row < gridSize; row++) {
-            for (int col = 0; col < gridSize; col++) {
-                GameButton btn = new GameButton(row, col, grid);
-                btn.setOnAction(e -> handleButtonAction(btn, gridIndex));
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                GameButton btn = new GameButton(row, col, this);
                 grid.add(btn, col, row);
+                buttons[row][col] = btn;
             }
-        }
-        return grid;
-    }
-    private void positionAndLabelGrid(Pane pane, GridPane grid, int gridIndex) {
-        // Existing positioning logic
-        switch (gridIndex) {
-            case 0:
-                grid.setLayoutX(150);
-                grid.setLayoutY(150);
-                break;
-            case 1:
-                grid.setLayoutX(351);
-                grid.setLayoutY(150);
-                break;
-            case 2:
-                grid.setLayoutX(150);
-                grid.setLayoutY(351);
-                break;
         }
 
-        // Labeling logic
-        for (int i = 0; i < 4; i++) {
-            if (gridIndex == 0 || gridIndex == 2) { // Add row labels for first and third grids
-                Label rowLabel = new Label("Row " + (i + 1));
-                rowLabel.setLayoutX(grid.getLayoutX() - 50); // Adjust as needed
-                rowLabel.setLayoutY(grid.getLayoutY() + i * 50 + 25); // Center in cell
-                pane.getChildren().add(rowLabel);
-            }
-            if (gridIndex == 0 || gridIndex == 1) { // Add column labels for first and second grids
-                Label colLabel = new Label("Col " + (i + 1));
-                colLabel.setLayoutX(grid.getLayoutX() + i * 50 + 15); // Adjust as needed
-                colLabel.setLayoutY(grid.getLayoutY() - 30); // Above the grid
-                pane.getChildren().add(colLabel);
-            }
-        }
+        root.setCenter(grid);
+        scene = new Scene(root, 600, 400);
     }
-    private void handleButtonAction(GameButton button, int gridIndex) {
-        // Toggle button state
-        if (button.getText().equals(" ")) {
-            button.setText("X");
-            button.setTextFill(Color.RED);
-        } else if (button.getText().equals("X")) {
-            button.setText("O");
-            button.setTextFill(Color.GREEN);
-            toggleRowColButtons(button.getGridPane(), button.getRow(), button.getCol(), true, button);
+
+    public void handleButtonAction(GameButton button) {
+        int row = button.getRow();
+        int col = button.getCol();
+
+        // Toggle button state and update appearance
+        if (!button.getText().equals("O")) {
+            // If not currently "O", it can be toggled freely
+            if (button.getText().equals(" ")) {
+                button.setText("X");
+                button.setTextFill(Color.RED);
+            } else if (button.getText().equals("X")) {
+                button.setText("O");
+                button.setTextFill(Color.GREEN);
+                // Mark all in row/col as X and disable
+                toggleRowColButtons(row, col, true, button);
+            }
         } else {
+            // If currently "O", toggling back to initial state and re-enable all in row/col if applicable
             button.setText(" ");
-            button.setTextFill(Color.BLACK);
-            toggleRowColButtons(button.getGridPane(), button.getRow(), button.getCol(), false, button);
+            toggleRowColButtons(row, col, false, button); // Re-enable and clear Xs if not affected by another O
         }
     }
-    private void toggleRowColButtons(GridPane grid, int row, int col, boolean disable, GameButton originButton) {
-        for (Node node : grid.getChildren()) {
-            if (node instanceof GameButton) {
-                GameButton btn = (GameButton) node;
+
+    private void toggleRowColButtons(int row, int col, boolean disable, GameButton originButton) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                GameButton btn = buttons[i][j];
                 if (btn == originButton) continue; // Skip the origin button
 
-                int btnRow = GridPane.getRowIndex(btn);
-                int btnCol = GridPane.getColumnIndex(btn);
-
-                if (btnRow == row || btnCol == col) {
+                if (i == row || j == col) {
                     if (disable) {
                         if (!btn.getText().equals("O")) { // Don't disable if it's an "O"
                             btn.setText("X");
@@ -107,8 +75,8 @@ public class GridDisplayScene {
                             btn.setDisable(true);
                         }
                     } else {
-                        // Only re-enable if not in line with another "O"
-                        if (!isInLineWithAnotherO(grid, btnRow, btnCol, originButton)) {
+                        // Re-enable if not in line with another "O"
+                        if (!isInLineWithAnotherO(i, j, originButton)) {
                             btn.setText(" ");
                             btn.setDisable(false);
                         }
@@ -117,22 +85,22 @@ public class GridDisplayScene {
             }
         }
     }
-    private boolean isInLineWithAnotherO(GridPane grid, int row, int col, GameButton originButton) {
-        for (Node node : grid.getChildren()) {
-            if (node instanceof GameButton) {
-                GameButton btn = (GameButton) node;
-                int btnRow = GridPane.getRowIndex(btn);
-                int btnCol = GridPane.getColumnIndex(btn);
 
-                if ((btnRow == row || btnCol == col) && btn.getText().equals("O") && btn != originButton) {
-                    return true;
-                }
-            }
+    private boolean isInLineWithAnotherO(int row, int col, GameButton originButton) {
+        // Check the row and column for another "O", excluding the origin button
+        for (int i = 0; i < rows; i++) {
+            if (buttons[row][i].getText().equals("O") && buttons[row][i] != originButton) return true;
+        }
+        for (int j = 0; j < cols; j++) {
+            if (buttons[j][col].getText().equals("O") && buttons[j][col] != originButton) return true;
         }
         return false;
     }
 
+
     public Scene getScene() {
         return scene;
     }
+
+    // Additional methods for managing button states and interactions
 }
