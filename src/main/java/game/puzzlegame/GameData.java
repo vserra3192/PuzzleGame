@@ -2,6 +2,7 @@ package game.puzzlegame;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameData {
@@ -10,9 +11,7 @@ public class GameData {
     private String[] header3and4;
     private String[] clues;
     private String story;
-    private int[][] grid1Answers;
-    private int[][] grid2Answers;
-    private int[][] grid3Answers;
+    private ArrayList<Integer[]> gridAnswers = new ArrayList<>();
 
     public GameData(String filePath) {
         try {
@@ -35,24 +34,18 @@ public class GameData {
                 clues = line.substring("clues:".length()).trim().split("\\|");
             } else if (line.startsWith("story:")) {
                 story = line.substring("story:".length()).trim();
-            } else if (line.startsWith("grid1:")) {
-                grid1Answers = parseGrid(line);
-            } else if (line.startsWith("grid2:")) {
-                grid2Answers = parseGrid(line);
-            } else if (line.startsWith("grid3:")) {
-                grid3Answers = parseGrid(line);
+            } else if (line.startsWith("grid")) {
+                gridAnswers.add(parseGrid(line));
             }
         }
     }
 
-    private int[][] parseGrid(String line) {
+    private Integer[] parseGrid(String line) {
         String[] pairs = line.substring(line.indexOf(':') + 1).trim().split(" ");
-        int[][] grid = new int[pairs.length][2]; // Assuming each pair consists of 2 integers
+        Integer[] grid = new Integer[pairs.length]; // Assuming each pair consists of 2 integers
 
         for (int i = 0; i < pairs.length; i++) {
-            String[] nums = pairs[i].split(",");
-            grid[i][0] = Integer.parseInt(nums[0]);
-            grid[i][1] = Integer.parseInt(nums[1]);
+            grid[i] = Integer.parseInt(pairs[i]);
         }
         return grid;
     }
@@ -79,15 +72,7 @@ public class GameData {
         return story;
     }
 
-    public int[][] getGrid1Answers() {
-        return grid1Answers;
-    }
-
-    public int[][] getGrid2Answers() {
-        return grid2Answers;
-    }
-
-    public int[][] getGrid3Answers() {
-        return grid3Answers;
+    public ArrayList<Integer[]> getGridAnswers() {
+        return gridAnswers;
     }
 }

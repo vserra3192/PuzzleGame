@@ -13,6 +13,8 @@ import java.util.ArrayList;
 
 
 public class GridDisplayScene {
+    private MainApp mainApp = new MainApp();
+    private Button gameOverButton;
     private GameData gameData;
     private Scene scene;
     private int gridSize;
@@ -57,7 +59,7 @@ public class GridDisplayScene {
         sideBox.getChildren().add(tabPane);
 
 
-        Button clearErrorsButton = new Button("Clear Errors");
+        Button clearErrorsButton = new Button("Check Answers");
         clearErrorsButton.setOnAction(e -> clearErrors());
 
         Button hintButton = new Button("Hint");
@@ -65,6 +67,9 @@ public class GridDisplayScene {
 
         Button startOverButton = new Button("Start Over");
         startOverButton.setOnAction((e -> startOver()));
+
+        gameOverButton = new Button("CORRECT!");
+        gameOverButton.setOnAction((event -> onGameOver()));
 
         root.getChildren().add(sideBox);
         sideBox.setLayoutX(700);
@@ -81,6 +86,12 @@ public class GridDisplayScene {
         root.getChildren().add(hintButton);
         hintButton.setLayoutX(200);
         hintButton.setLayoutY(650);
+
+        root.getChildren().add(gameOverButton);
+        gameOverButton.setPrefSize(150,150);
+        gameOverButton.setLayoutX(760);
+        gameOverButton.setLayoutY(350);
+        gameOverButton.setVisible(false);
 
         scene = new Scene(root, 1000, 700);
     }
@@ -138,12 +149,10 @@ public class GridDisplayScene {
      */
     private void fillAnswers(ArrayList<String[]> answerSheets){
         for (int gridNum = 0; gridNum < gridNumber; gridNum++) {
-            answerSheets.get(gridNum)[0] = "O";
-            answerSheets.get(gridNum)[5] = "O";
-            answerSheets.get(gridNum)[10] = "O";
-            answerSheets.get(gridNum)[15] = "O";
-            for (int j = 0; j < gridSize; j++) {
-            }
+            answerSheets.get(gridNum)[gameData.getGridAnswers().get(gridNum)[0]] = "O";
+            answerSheets.get(gridNum)[gameData.getGridAnswers().get(gridNum)[1]] = "O";
+            answerSheets.get(gridNum)[gameData.getGridAnswers().get(gridNum)[2]] = "O";
+            answerSheets.get(gridNum)[gameData.getGridAnswers().get(gridNum)[3]] = "O";
         }
     }
     /**
@@ -153,24 +162,32 @@ public class GridDisplayScene {
      * @Author Victor Serra
      */
     private void clearErrors() {
+        int correctAnswers = 0;
         int gridNum = 0;
         for (GridPane grids: gridPanes){
-            String[] answerSheet = answerSheets.get(gridNum); // Get answer sheet for current grid
-            int pos = 0; // Position in the answer sheet
-
+            String[] answerSheet = answerSheets.get(gridNum);
+            int pos = 0;
             for (Node node : grids.getChildren()) {
                 if (node instanceof GameButton) {
                     GameButton button = (GameButton) node;
                     if (!button.getText().equals(answerSheet[pos])) {
                         button.setText(" ");
                         button.setDisable(false);
+                    } else if(button.getText().equals(answerSheet[pos])) {
+                        correctAnswers++;
                     }
-                    pos++; // Move to the next position in the answer sheet
+                    pos++;
                 }
             }
-
-            gridNum++; // Move to the next grid
+            gridNum++;
+            if(correctAnswers == 48){
+                gameOverButton.setVisible(true);
+                System.out.println("NICEAFJHDI");
+            }
         }
+    }
+    private void onGameOver() {
+        mainApp.showPuzzleCreatorScene();
     }
 
     private Tab createTab(String title, String content){
