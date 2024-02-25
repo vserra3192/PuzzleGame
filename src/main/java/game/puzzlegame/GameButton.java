@@ -10,6 +10,16 @@ public class GameButton extends Button {
     private int col;
     private GridPane grid;
 
+    /**
+     * This GameButton Class is what populates each grid within the game. It extends
+     * JavaFXs Button class and takes in 3 parameters. The row and column it will be
+     * placed in and which grid it will be placed in. And default text as " ".
+     * @param row
+     * @param col
+     * @param grid
+     * @Author Ramiz
+     */
+
     public GameButton(int row, int col, GridPane grid) {
         super(" ");
         this.row = row;

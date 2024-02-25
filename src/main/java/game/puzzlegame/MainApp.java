@@ -37,7 +37,7 @@ public class MainApp extends Application {
 
         GridDisplayScene gridDisplayScene = new GridDisplayScene(gridSize,gridNumber,difficultyLevel);
         primaryStage.setScene(gridDisplayScene.getScene());
-        primaryStage.setTitle("Enjoy the game");
+        primaryStage.setTitle("Logic Puzzle Game");
         primaryStage.show();
     }
 

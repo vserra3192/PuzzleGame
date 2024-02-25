@@ -22,6 +22,11 @@ public class PuzzleCreatorScene {
     private ChoiceBox<String> gridSizeChoiceBox;
     private ChoiceBox<String> difficultyChoiceBox;
 
+    /**
+     * Creates The "Main Menu" Where the user can select the size and difficulty of they game.
+     * @param mainApp
+     * @Author Ramiz
+     */
     public PuzzleCreatorScene(MainApp mainApp) {
         this.mainApp = mainApp;
         this.gridSizeChoiceBox = new ChoiceBox<>();
@@ -33,7 +38,11 @@ public class PuzzleCreatorScene {
         root.setCenter(centerBox);
         this.scene = new Scene(root, 600, 400);
     }
-
+    /**
+     * Sets up the location of the text, buttons and drop down menu.
+     * as well as the options for the two drop down menus
+     * @Author Ramiz
+     */
     private VBox setupCenterBox() {
         VBox centerBox = new VBox(20);
         centerBox.setAlignment(Pos.TOP_CENTER);
@@ -43,7 +52,8 @@ public class PuzzleCreatorScene {
         titleLabel.setFont(new Font("Arial", 24));
         titleLabel.setTextFill(Color.DARKBLUE);
 
-        Label descriptionLabel = new Label("Select your grid size and difficulty range below and a puzzle will be initialized to match your preferences.");
+        Label descriptionLabel = new Label("Select your grid size and difficulty range below and a puzzle will be " +
+                "initialized to match your preferences.");
         descriptionLabel.setWrapText(true);
         descriptionLabel.setTextAlignment(TextAlignment.CENTER);
         descriptionLabel.setFont(new Font("Arial", 14));
@@ -64,7 +74,12 @@ public class PuzzleCreatorScene {
         centerBox.getChildren().addAll(titleLabel, descriptionLabel, gridSizeChoiceBox, difficultyChoiceBox, createPuzzleButton);
         return centerBox;
     }
-
+    /**
+     * Checks the value of the chosen options by the user (Size and Difficulty) and
+     * passes it to the gridDisplayScene class used to Initialize the Game after
+     * clicking the createPuzzle button.
+     * @Author Ramiz
+     */
     private void createPuzzle() {
         if ("3x4".equals(gridSizeChoiceBox.getValue()) && "Easy".equals(difficultyChoiceBox.getValue())) {
             // If the selected grid size and difficulty are as required, switch to the GridDisplayScene

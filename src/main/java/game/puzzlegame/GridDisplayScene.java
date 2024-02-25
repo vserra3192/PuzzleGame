@@ -9,6 +9,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
+
 
 public class GridDisplayScene {
 
@@ -25,10 +27,12 @@ public class GridDisplayScene {
         clearErrorsButton.setOnAction(e -> onClearErrors());
         initializeUI();
      */
+    ArrayList<GridPane> gridPanes = new ArrayList<>();
     private Scene scene;
     private int gridSize;
     private int gridNumber;
     private String difficultyLevel;
+    private ArrayList<String[]> answerSheets = new ArrayList<>();
 
     public GridDisplayScene(int gridSize, int gridNumber, String difficultyLevel) {
         this.gridSize = gridSize;
@@ -135,12 +139,13 @@ public class GridDisplayScene {
         scene = new Scene(root, 800, 400);
     }
          */
-
+        createAnswerSheets(gridNumber);
         Pane root = new Pane();
 
         for (int i = 0; i < gridNumber; i++) {
             GridPane grid = createGridPane(i);
             positionLabelandGrid(root, grid, i);
+            gridPanes.add(grid);
             root.getChildren().add(grid);
         }
 
@@ -164,7 +169,7 @@ public class GridDisplayScene {
         hintButton.setOnAction((e -> giveHint()));
 
         Button startOverButton = new Button("Start Over");
-        hintButton.setOnAction((e -> startOver()));
+        startOverButton.setOnAction((e -> startOver()));
 
         root.getChildren().add(sideBox);
         sideBox.setLayoutX(700);
@@ -185,48 +190,92 @@ public class GridDisplayScene {
         scene = new Scene(root, 1000, 700);
     }
 
+    /**
+     * Method is called when Start Over Button is clicked. Iterates through each GameButton in
+     * each grid and clears the text and makes them clickable.
+     * @Author Victor Serra
+     */
     private void startOver() {
-        /*
-                for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                buttons[i][j].setText(" ");
-                buttons[i][j].setDisable(false);
+        for (GridPane grids: gridPanes){
+            for (Node node : grids.getChildren()) {
+                if (node instanceof GameButton) {
+                    GameButton button = (GameButton) node;
+                    button.setText(" ");
+                    button.setDisable(false);
+                }
             }
         }
-         */
     }
 
     private void giveHint() {
     }
 
-    private void clearErrors() {
-        /*
-            private void createAnswerSheet(){
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                answerSheet[i][j] = "X";
+    /**
+     * Creates the number of answer sheets that is needed to compare user given answers to
+     * the correct answers.
+     * @param gridNumber
+     * @Author Victor Serra
+     */
+
+    private void createAnswerSheets(int gridNumber){
+        for (int numGrids = 0; numGrids < gridNumber; numGrids++) {
+            answerSheets.add(new String[gridSize*gridSize]);
+        }
+        for (int gridNum = 0; gridNum < gridNumber; gridNum++) {
+            for (int pos = 0; pos < gridSize*gridSize; pos++) {
+                answerSheets.get(gridNum)[pos] = "X";
             }
         }
-        answerSheet[0][0] = "O";
-        answerSheet[1][1] = "O";
-        answerSheet[2][2] = "O";
-        answerSheet[3][3] = "O";
+        fillAnswers(answerSheets);
     }
-    //for each button in the grid, it compares its value to the answer sheet "grid" (a 2d array with the answers)
-    //and clears the answers if that are incorrect.
-    private void onClearErrors() {
-        createAnswerSheet();
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if(!buttons[i][j].getText().equals(answerSheet[i][j])){
-                    buttons[i][j].setText(" ");
-                    buttons[i][j].setDisable(false);
+    /*
+    0123
+    4567
+    8901
+    2345
+     */
+
+    /**
+     * This method will take the location of the correct answers from the Game.json file
+     * and add it to the answerSheets given in the parameter.
+     * @param answerSheets
+     * @Author Victor Serra
+     */
+    private void fillAnswers(ArrayList<String[]> answerSheets){
+        for (int gridNum = 0; gridNum < gridNumber; gridNum++) {
+            answerSheets.get(gridNum)[0] = "O";
+            answerSheets.get(gridNum)[5] = "O";
+            answerSheets.get(gridNum)[10] = "O";
+            answerSheets.get(gridNum)[15] = "O";
+            for (int j = 0; j < gridSize; j++) {
+            }
+        }
+    }
+    /**
+     * called when clear errors button is clicked. for each button in the grid,
+     * it compares its text value to the answerSheet array
+     * and clears the answers if they are incorrect.
+     * @Author Victor Serra
+     */
+    private void clearErrors() {
+        int gridNum = 0;
+        for (GridPane grids: gridPanes){
+            String[] answerSheet = answerSheets.get(gridNum); // Get answer sheet for current grid
+            int pos = 0; // Position in the answer sheet
+
+            for (Node node : grids.getChildren()) {
+                if (node instanceof GameButton) {
+                    GameButton button = (GameButton) node;
+                    if (!button.getText().equals(answerSheet[pos])) {
+                        button.setText(" ");
+                        button.setDisable(false);
+                    }
+                    pos++; // Move to the next position in the answer sheet
                 }
             }
-        }
-    }
-         */
 
+            gridNum++; // Move to the next grid
+        }
     }
 
     private Tab createTab(String title, String content){
