@@ -73,8 +73,8 @@ public class GridDisplayScene {
         gameOverButton.setOnAction((event -> onGameOver()));
 
         root.getChildren().add(hintLabel);
-        hintLabel.setLayoutX(250);
-        hintLabel.setLayoutY(700);
+        hintLabel.setLayoutX(200);
+        hintLabel.setLayoutY(620);
 
         root.getChildren().add(sideBox);
         sideBox.setLayoutX(625);
@@ -280,8 +280,6 @@ public class GridDisplayScene {
         }
 
     }
-
-
     private void addLabel(Pane root, String text, double layoutX, double layoutY, String labelStyle, double prefWidth, double prefHeight, double rotate) {
         Label label = new Label(text);
         label.setLayoutX(layoutX);
