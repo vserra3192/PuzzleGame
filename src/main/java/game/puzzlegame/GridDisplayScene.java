@@ -213,9 +213,12 @@ public class GridDisplayScene {
     private GridPane createGridPane(int gridIndex) {
         GridPane grid = new GridPane();
 
+        String buttonStyle = "-fx-border-color: black; -fx-background-color: white; -fx-alignment: center;";
+
         for (int row = 0; row < gridSize; row++) {
             for (int col = 0; col < gridSize; col++) {
                 GameButton btn = new GameButton(row, col, grid);
+                btn.setStyle(buttonStyle);
                 btn.setOnAction(e -> handleButtonAction(btn, gridIndex));
                 grid.add(btn, col, row);
             }
@@ -232,7 +235,7 @@ public class GridDisplayScene {
         String [] header3and4 = gameData.getHeader3and4();
 
         addLabel(root, header1[0],200,0, headerLabelStyle, 200,50,0);
-        addLabel(root, header3and4[0], 401, 0, headerLabelStyle, 200, 50, 0);
+        addLabel(root, header3and4[0], 400, 0, headerLabelStyle, 200, 50, 0);
         addLabel(root, header2[0], -75, 275, headerLabelStyle, 200, 50, 270);
         addLabel(root, header3and4[0], -75, 475, headerLabelStyle, 200, 50, 270);
 
@@ -269,11 +272,11 @@ public class GridDisplayScene {
             grid.setLayoutX(200);
             grid.setLayoutY(200);
         } else if (gridIndex == 1) {
-            grid.setLayoutX(401);
+            grid.setLayoutX(400);
             grid.setLayoutY(200);
         } else if (gridIndex == 2) {
             grid.setLayoutX(200);
-            grid.setLayoutY(401);
+            grid.setLayoutY(400);
         }
 
     }
