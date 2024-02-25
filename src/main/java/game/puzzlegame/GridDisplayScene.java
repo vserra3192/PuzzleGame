@@ -204,8 +204,8 @@ public class GridDisplayScene {
 
         addLabel(root, header1[0],200,0, headerLabelStyle, 200,50,0);
         addLabel(root, header3and4[0], 401, 0, headerLabelStyle, 200, 50, 0);
-        addLabel(root, header2[0], -75, 275, headerLabelStyle, 200, 50, 90);
-        addLabel(root, header3and4[0], -75, 475, headerLabelStyle, 200, 50, 90);
+        addLabel(root, header2[0], -75, 275, headerLabelStyle, 200, 50, 270);
+        addLabel(root, header3and4[0], -75, 475, headerLabelStyle, 200, 50, 270);
 
 
         // Depending on the gridIndex, we will set different labels
@@ -221,14 +221,14 @@ public class GridDisplayScene {
                 break;
             case 1:
                 // Grid Two: Use header3and4 for columns, no row labels
-                for (int i = 0; i < gameData.getHeader3and4().length; i++) {
+                for (int i = 1; i < gameData.getHeader3and4().length; i++) {
                     // Col labels
                     addLabel(root,gameData.getHeader3and4()[i] ,(i*50)+300,100, labelStyle, 150,50,270);
                 }
                 break;
             case 2:
                 // Grid Three: Use header3and4 for rows, no column labels
-                for (int i = 0; i < gameData.getHeader3and4().length; i++) {
+                for (int i = 1; i < gameData.getHeader3and4().length; i++) {
                     // Row labels
                     addLabel(root,gameData.getHeader3and4()[i] ,50,(i*50)+350, labelStyle, 150,50,0);
                 }
