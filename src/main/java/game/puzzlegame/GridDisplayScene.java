@@ -14,7 +14,8 @@ import java.util.ArrayList;
 
 public class GridDisplayScene {
     private Label hintLabel = new Label();
-    private MainApp mainApp = new MainApp();
+
+    private MainApp mainApp;
     private Button gameOverButton;
     private GameData gameData;
     private Scene scene;
@@ -25,7 +26,8 @@ public class GridDisplayScene {
 
     ArrayList<GridPane> gridPanes = new ArrayList<>();
 
-    public GridDisplayScene(int gridSize, int gridNumber, String difficultyLevel) {
+    public GridDisplayScene(int gridSize, int gridNumber, String difficultyLevel, MainApp mainApp) {
+        this.mainApp = mainApp;
         this.gameData = new GameData("src/main/resources/game/puzzlegame/GameData0001.txt");
         this.gridSize = gridSize;
         this.gridNumber = gridNumber;
@@ -71,8 +73,8 @@ public class GridDisplayScene {
         gameOverButton.setOnAction((event -> onGameOver()));
 
         root.getChildren().add(hintLabel);
-        hintLabel.setLayoutX(700);
-        hintLabel.setLayoutY(250);
+        hintLabel.setLayoutX(250);
+        hintLabel.setLayoutY(700);
 
         root.getChildren().add(sideBox);
         sideBox.setLayoutX(625);
@@ -122,7 +124,6 @@ public class GridDisplayScene {
         }else {
             hintLabel.setText("");
         }
-
     }
 
     /**
@@ -195,7 +196,7 @@ public class GridDisplayScene {
      * Restarts the game
      */
     private void onGameOver() {
-        startOver();
+        mainApp.showPuzzleCreatorScene();
         gameOverButton.setVisible(false);
     }
 
