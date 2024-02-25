@@ -187,7 +187,8 @@ public class GridDisplayScene {
         }
     }
     private void onGameOver() {
-        mainApp.showPuzzleCreatorScene();
+        startOver();
+        gameOverButton.setVisible(false);
     }
 
     private Tab createTab(String title, String content){
