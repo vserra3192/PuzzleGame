@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 
 public class GridDisplayScene {
+    private Label hintLabel = new Label();
     private MainApp mainApp = new MainApp();
     private Button gameOverButton;
     private GameData gameData;
@@ -69,6 +70,10 @@ public class GridDisplayScene {
         gameOverButton = new Button("CORRECT!");
         gameOverButton.setOnAction((event -> onGameOver()));
 
+        root.getChildren().add(hintLabel);
+        hintLabel.setLayoutX(700);
+        hintLabel.setLayoutY(250);
+
         root.getChildren().add(sideBox);
         sideBox.setLayoutX(625);
         sideBox.setLayoutY(0);
@@ -112,6 +117,12 @@ public class GridDisplayScene {
     }
 
     private void giveHint() {
+        if (hintLabel.getText().isEmpty()){
+            hintLabel.setText(gameData.getHints());
+        }else {
+            hintLabel.setText("");
+        }
+
     }
 
     /**
@@ -134,7 +145,7 @@ public class GridDisplayScene {
     }
 
     /**
-     * This method will take the location of the correct answers from the Game.json file
+     * This method will take the location of the correct answers from the GameData file
      * and add it to the answerSheets given in the parameter.
      * @param answerSheets
      * @Author Victor Serra
@@ -150,7 +161,8 @@ public class GridDisplayScene {
     /**
      * called when clear errors button is clicked. for each button in the grid,
      * it compares its text value to the answerSheet array
-     * and clears the answers if they are incorrect.
+     * and clears the answers if they are incorrect. Or, if all answers are correct,
+     * it displays a button which restarts the game.
      * @Author Victor Serra
      */
     private void clearErrors() {
@@ -174,10 +186,14 @@ public class GridDisplayScene {
             gridNum++;
             if(correctAnswers == 48){
                 gameOverButton.setVisible(true);
-                System.out.println("NICEAFJHDI");
             }
         }
     }
+
+    /**
+     * This method is called when the gameOver button is pressed.
+     * Restarts the game
+     */
     private void onGameOver() {
         startOver();
         gameOverButton.setVisible(false);
