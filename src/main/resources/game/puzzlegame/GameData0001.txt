@@ -1,8 +1,0 @@
-header1: dates, Eddie, Frank, Jesus, Randy
-header2: ages, 22, 23, 24, 25
-header3and4: professions, accountant, boxer, firefighter, musician
-clues: 1.Jesus was 2 years older than Frank.|2.The 25-year-old was either Eddie or the firefighter.|3.Frank was the accountant.|4.Randy was 1 year older than Jesus.|5.Jesus was the musician.
-story: Kara recently moved to a new city, so last month she signed up for an online matchmaking service to meet some interesting new people in her area. Using only the clues below, match each of her dates to their age and occupation, and determine where each ended up taking Kara on their first date.
-grid1: 1,2 2,1 3,3 4,4
-grid2: 1,1 2,2 3,4 4,3
-grid3: 1,2 2,1 3,4 4,3
