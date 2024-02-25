@@ -47,14 +47,12 @@ public class GridDisplayScene {
         }
 
         VBox sideBox = new VBox();
-        sideBox.setPrefWidth(400);
-        sideBox.setAlignment(Pos.TOP_LEFT);
+
 
         TabPane tabPane = new TabPane();
-        tabPane.getTabs().add(createTab("Clues", String.join("\n", gameData.getClues())));
-        tabPane.getTabs().add(createTab("Story", gameData.getStory()));
-        tabPane.getTabs().add(createTab("Notes", " "));
-        tabPane.getTabs().add(createTab("Answer", ""));
+        tabPane.getTabs().add(createTab("Clues", String.join("\n", gameData.getClues()),false));
+        tabPane.getTabs().add(createTab("Story", gameData.getStory(), false));
+        tabPane.getTabs().add(createTab("Notes", " ", true));
 
         sideBox.getChildren().add(tabPane);
 
@@ -72,7 +70,7 @@ public class GridDisplayScene {
         gameOverButton.setOnAction((event -> onGameOver()));
 
         root.getChildren().add(sideBox);
-        sideBox.setLayoutX(700);
+        sideBox.setLayoutX(625);
         sideBox.setLayoutY(0);
 
         root.getChildren().add(startOverButton);
@@ -89,8 +87,8 @@ public class GridDisplayScene {
 
         root.getChildren().add(gameOverButton);
         gameOverButton.setPrefSize(150,150);
-        gameOverButton.setLayoutX(760);
-        gameOverButton.setLayoutY(350);
+        gameOverButton.setLayoutX(740);
+        gameOverButton.setLayoutY(500);
         gameOverButton.setVisible(false);
 
         scene = new Scene(root, 1000, 700);
@@ -134,12 +132,6 @@ public class GridDisplayScene {
         }
         fillAnswers(answerSheets);
     }
-    /*
-    0123
-    4567
-    8901
-    2345
-     */
 
     /**
      * This method will take the location of the correct answers from the Game.json file
@@ -191,9 +183,11 @@ public class GridDisplayScene {
         gameOverButton.setVisible(false);
     }
 
-    private Tab createTab(String title, String content){
+    private Tab createTab(String title, String content, boolean editable){
         Tab tab = new Tab(title);
         TextArea textArea = new TextArea();
+        textArea.setEditable(editable);
+        textArea.setPrefSize(350, 450);
         textArea.setText(content);
         tab.setContent(textArea);
         tab.setClosable(false);
