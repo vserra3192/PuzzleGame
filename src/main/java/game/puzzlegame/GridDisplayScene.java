@@ -54,7 +54,7 @@ public class GridDisplayScene {
 
         TabPane tabPane = new TabPane();
         tabPane.getTabs().add(createTab("Clues", String.join("\n", gameData.getClues()),false));
-        tabPane.getTabs().add(createTab("Story", gameData.getStory(), false));
+        tabPane.getTabs().add(createTab("Story", String.join("\n",gameData.getStory()), false));
         tabPane.getTabs().add(createTab("Notes", " ", true));
 
         sideBox.getChildren().add(tabPane);

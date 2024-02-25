@@ -11,7 +11,7 @@ public class GameData {
     private String[] header2;
     private String[] header3and4;
     private String[] clues;
-    private String story;
+    private String[] story;
     private ArrayList<Integer[]> gridAnswers = new ArrayList<>();
 
     /**
@@ -48,7 +48,7 @@ public class GameData {
             } else if (line.startsWith("clues:")) {
                 clues = line.substring("clues:".length()).trim().split("\\|");
             } else if (line.startsWith("story:")) {
-                story = line.substring("story:".length()).trim();
+                story = line.substring("story:".length()).trim().split("\\|");;
             } else if (line.startsWith("hint:")) {
                 hints = line.substring("hint:".length()).trim();
             } else if (line.startsWith("grid")) {
@@ -85,7 +85,7 @@ public class GameData {
         return clues;
     }
 
-    public String getStory() {
+    public String[] getStory() {
         return story;
     }
 
