@@ -6,12 +6,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameData {
+    private String hints;
     private String[] header1;
     private String[] header2;
     private String[] header3and4;
     private String[] clues;
     private String story;
     private ArrayList<Integer[]> gridAnswers = new ArrayList<>();
+
+    /**
+     * This Class is used to read the GameData.txt File to find all the parameters
+     * and data used in the game. It reads each line in the GameData file and
+     * places them into a List of Strings.
+     * @param filePath
+     */
 
     public GameData(String filePath) {
         try {
@@ -22,6 +30,13 @@ public class GameData {
         }
     }
 
+    /**
+     * This Method takes the list of strings and reads through each line.
+     * depending on its starting value, it trims the rest of the line and
+     * places it into a corresponding attribute (either and array of string or
+     * just a string). Which are used in the GridDisplayScene Class.
+     * @param lines
+     */
     private void parseData(List<String> lines) {
         for (String line : lines) {
             if (line.startsWith("header1:")) {
@@ -34,6 +49,8 @@ public class GameData {
                 clues = line.substring("clues:".length()).trim().split("\\|");
             } else if (line.startsWith("story:")) {
                 story = line.substring("story:".length()).trim();
+            } else if (line.startsWith("hint:")) {
+                hints = line.substring("hint:".length()).trim();
             } else if (line.startsWith("grid")) {
                 gridAnswers.add(parseGrid(line));
             }
@@ -74,5 +91,9 @@ public class GameData {
 
     public ArrayList<Integer[]> getGridAnswers() {
         return gridAnswers;
+    }
+
+    public String getHints() {
+        return hints;
     }
 }
