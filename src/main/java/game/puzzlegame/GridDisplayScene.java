@@ -194,6 +194,7 @@ public class GridDisplayScene {
         return grid;
     }
     private void positionLabelandGrid(Pane root, GridPane grid, int gridIndex) {
+        String headerLabelStyle = "-fx-border-color: black; -fx-border-width: 2; -fx-padding: 4 4 4 4; -fx-background-color: white; -fx-alignment: center;";
         String labelStyle = "-fx-border-color: black; -fx-border-width: 2; -fx-padding: 4 4 4 4; -fx-background-color: white; -fx-alignment: center;";
 
 
@@ -201,86 +202,62 @@ public class GridDisplayScene {
         String [] header2 = gameData.getHeader2();
         String [] header3and4 = gameData.getHeader3and4();
 
-        Label header1Label = new Label(header1[0]);
-        Label header2Label = new Label(header2[0]);
-        Label header3Label = new Label(header3and4[0]);
-        Label header4Label = new Label(header3and4[0]);
+        addLabel(root, header1[0],200,0, headerLabelStyle, 200,50,0);
+        addLabel(root, header3and4[0], 401, 0, headerLabelStyle, 200, 50, 0);
+        addLabel(root, header2[0], -75, 275, headerLabelStyle, 200, 50, 90);
+        addLabel(root, header3and4[0], -75, 475, headerLabelStyle, 200, 50, 90);
 
 
-        //dates
-        header1Label.setLayoutX(200);
-        header1Label.setLayoutY(0);
-        header1Label.setStyle(labelStyle);
-        header1Label.setPrefSize(200, 50);
-        root.getChildren().add(header1Label);
-
-        //Profession
-        header3Label.setLayoutX(401);
-        header3Label.setLayoutY(0);
-        header3Label.setStyle(labelStyle);
-        header3Label.setPrefSize(200, 50);
-        root.getChildren().add(header3Label);
-
-        //Ages
-        header2Label.setLayoutX(-75);
-        header2Label.setLayoutY(275);
-        header2Label.setStyle(labelStyle);
-        header2Label.setPrefSize(200, 50);
-        header2Label.setRotate(90);
-        root.getChildren().add(header2Label);
-
-        //Profession
-        header4Label.setLayoutX(-75);
-        header4Label.setLayoutY(475);
-        header4Label.setStyle(labelStyle);
-        header4Label.setPrefSize(200, 50);
-        header4Label.setRotate(90);
-        root.getChildren().add(header4Label);
-
-
+        // Depending on the gridIndex, we will set different labels
         switch (gridIndex) {
             case 0:
-                grid.setLayoutX(200);
-                grid.setLayoutY(200);
+                // Grid One: Use header1 for columns and header2 for rows
+                for (int i = 1; i < gameData.getHeader1().length; i++) {
+                    // Column labels
+                    addLabel(root,gameData.getHeader1()[i] ,(i*50)+100,100, labelStyle, 150,50,270);
+                    // Row labels
+                    addLabel(root,gameData.getHeader2()[i] ,50,(i*50)+150, labelStyle, 150,50,0);
+                }
                 break;
             case 1:
-                grid.setLayoutX(401);
-                grid.setLayoutY(200);
+                // Grid Two: Use header3and4 for columns, no row labels
+                for (int i = 0; i < gameData.getHeader3and4().length; i++) {
+                    // Col labels
+                    addLabel(root,gameData.getHeader3and4()[i] ,(i*50)+300,100, labelStyle, 150,50,270);
+                }
                 break;
             case 2:
-                grid.setLayoutX(200);
-                grid.setLayoutY(401);
+                // Grid Three: Use header3and4 for rows, no column labels
+                for (int i = 0; i < gameData.getHeader3and4().length; i++) {
+                    // Row labels
+                    addLabel(root,gameData.getHeader3and4()[i] ,50,(i*50)+350, labelStyle, 150,50,0);
+                }
                 break;
         }
 
-
-
-
-        for (int i = 0; i < 4; i++) {
-            if (gridIndex == 0 || gridIndex == 2) {
-                Label rowLabel = new Label("Row " + (i + 1));
-                rowLabel.setPrefSize(150, 50);
-
-                rowLabel.setLayoutX(50);
-                rowLabel.setLayoutY(grid.getLayoutY() + i * 50);
-
-                rowLabel.setStyle(labelStyle);
-                root.getChildren().add(rowLabel);
-            }
-            if (gridIndex == 0 || gridIndex == 1) {
-                Label colLabel = new Label("Col " + (i + 1));
-                colLabel.setPrefSize(150, 50);
-
-                colLabel.setLayoutX(grid.getLayoutX() + (i * 50)-50);
-                colLabel.setLayoutY(100);
-
-                colLabel.setStyle(labelStyle);
-                colLabel.setRotate(90);
-                root.getChildren().add(colLabel);
-            }
+        // Set grid layout based on index
+        if (gridIndex == 0) {
+            grid.setLayoutX(200);
+            grid.setLayoutY(200);
+        } else if (gridIndex == 1) {
+            grid.setLayoutX(401);
+            grid.setLayoutY(200);
+        } else if (gridIndex == 2) {
+            grid.setLayoutX(200);
+            grid.setLayoutY(401);
         }
 
+    }
 
+
+    private void addLabel(Pane root, String text, double layoutX, double layoutY, String labelStyle, double prefWidth, double prefHeight, double rotate) {
+        Label label = new Label(text);
+        label.setLayoutX(layoutX);
+        label.setLayoutY(layoutY);
+        label.setStyle(labelStyle);
+        label.setPrefSize(prefWidth, prefHeight);
+        label.setRotate(rotate);
+        root.getChildren().add(label);
     }
     private void handleButtonAction(GameButton button, int gridIndex) {
         // Toggle button state
