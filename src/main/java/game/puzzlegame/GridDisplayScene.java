@@ -13,133 +13,28 @@ import java.util.ArrayList;
 
 
 public class GridDisplayScene {
-
-    // previous Attributes
-    /*
-        getGameData();
-        this.rows = rows;
-        this.cols = cols;
-        buttons = new GameButton[rows][cols];
-        answerSheet = new String[rows][cols];
-        startOverButton = new Button("Start Over");
-        startOverButton.setOnAction(e -> onStartOver());
-        clearErrorsButton = new Button("clear Errors");
-        clearErrorsButton.setOnAction(e -> onClearErrors());
-        initializeUI();
-     */
-    ArrayList<GridPane> gridPanes = new ArrayList<>();
+    private GameData gameData;
     private Scene scene;
     private int gridSize;
     private int gridNumber;
     private String difficultyLevel;
     private ArrayList<String[]> answerSheets = new ArrayList<>();
 
+    ArrayList<GridPane> gridPanes = new ArrayList<>();
+
     public GridDisplayScene(int gridSize, int gridNumber, String difficultyLevel) {
+        this.gameData = new GameData("src/main/resources/game/puzzlegame/GameData0001.txt");
         this.gridSize = gridSize;
         this.gridNumber = gridNumber;
         this.difficultyLevel = difficultyLevel;
         initializeUI();
     }
 
-
-    //getGameData method
-    /*
-        private void getGameData(){
-        StringBuilder clueString = new StringBuilder("CLUES:\n");
-        StringBuilder storyString = new StringBuilder("Story:\n");
-        try {
-            scan = new Scanner(file);
-            String line = scan.nextLine();
-            if (line.equals("clues")){
-                while(!line.equals("story")){
-                    line = scan.nextLine();
-                    clueString.append(line).append("\n");
-                }
-                while (scan.hasNext()){
-                    line = scan.nextLine();
-                    storyString.append(line).append("\n");
-                }
-            }else{
-                System.out.println("Not correct format");
-            }
-        }catch (FileNotFoundException e){
-            System.out.println("File not found");
-        }
-        cluesText = clueString.toString();
-        storyText = storyString.toString();
-    }
-     */
-
-    //getNotesText method
-    /*
-        private String getNotesText() {
-        //write down notes
-        StringBuilder nb = new StringBuilder();
-        nb.append("Use this area to record notes that" +
-                "\n may assist you in solving the puzzle. ");
-        return  nb.toString();
-    }
-     */
     private void initializeUI() {
 
-        //Previous version of initializeUI
-        /*
-            private void initializeUI() {
-        BorderPane root = new BorderPane();
-        root.setPadding(new Insets(15, 20, 15, 20));
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.TOP_LEFT);
-
-        cluesBox = new VBox();
-        cluesBox.setPrefWidth(300); // Set preferred width
-        cluesBox.setAlignment(Pos.TOP_CENTER);
-
-        // Create tabs for each panel
-        TabPane tabPane = new TabPane();
-        Tab clueTab = new Tab("Clues");
-        TextArea clueTextArea = new TextArea();
-        clueTextArea.setText(cluesText);
-        clueTab.setContent(clueTextArea);
-        tabPane.getTabs().add(clueTab);
-        clueTab.setClosable(false);
-
-        Tab storyTab = new Tab("Story");
-        TextArea storyTextArea = new TextArea();
-        storyTextArea.setText(storyText);
-        storyTab.setContent(storyTextArea);
-        tabPane.getTabs().add(storyTab);
-        storyTab.setClosable(false);
-
-        Tab notesTab = new Tab("Notes ");
-        TextArea notesTextArea = new TextArea();
-        notesTextArea.setText(getNotesText());
-        notesTab.setContent(notesTextArea);
-        tabPane.getTabs().add(notesTab);
-        notesTab.setClosable(false);
-
-        Tab answerTab = new Tab("Answer");
-        TextArea answerTextArea = new TextArea();
-        answerTab.setContent(answerTextArea);
-        tabPane.getTabs().add(answerTab);
-        answerTab.setClosable(false);
-
-        cluesBox.getChildren().add(tabPane);
-
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                GameButton btn = new GameButton(row, col, this);
-                grid.add(btn, col, row);
-                buttons[row][col] = btn;
-            }
-        }
-        HBox buttonsHolder = new HBox(startOverButton, clearErrorsButton);
-        root.setBottom(buttonsHolder);
-        root.setCenter(grid);
-        root.setRight(cluesBox);
-        scene = new Scene(root, 800, 400);
-    }
-         */
         createAnswerSheets(gridNumber);
+
+
         Pane root = new Pane();
 
         for (int i = 0; i < gridNumber; i++) {
@@ -154,9 +49,9 @@ public class GridDisplayScene {
         sideBox.setAlignment(Pos.TOP_LEFT);
 
         TabPane tabPane = new TabPane();
-        tabPane.getTabs().add(createTab("Clues", "cluesText"));
-        tabPane.getTabs().add(createTab("Story", "storyText"));
-        tabPane.getTabs().add(createTab("Notes", "getNotesText()"));
+        tabPane.getTabs().add(createTab("Clues", String.join("\n", gameData.getClues())));
+        tabPane.getTabs().add(createTab("Story", gameData.getStory()));
+        tabPane.getTabs().add(createTab("Notes", " "));
         tabPane.getTabs().add(createTab("Answer", ""));
 
         sideBox.getChildren().add(tabPane);
@@ -299,44 +194,93 @@ public class GridDisplayScene {
         return grid;
     }
     private void positionLabelandGrid(Pane root, GridPane grid, int gridIndex) {
+        String labelStyle = "-fx-border-color: black; -fx-border-width: 2; -fx-padding: 4 4 4 4; -fx-background-color: white; -fx-alignment: center;";
+
+
+        String [] header1 = gameData.getHeader1();
+        String [] header2 = gameData.getHeader2();
+        String [] header3and4 = gameData.getHeader3and4();
+
+        Label header1Label = new Label(header1[0]);
+        Label header2Label = new Label(header2[0]);
+        Label header3Label = new Label(header3and4[0]);
+        Label header4Label = new Label(header3and4[0]);
+
+
+        //dates
+        header1Label.setLayoutX(200);
+        header1Label.setLayoutY(0);
+        header1Label.setStyle(labelStyle);
+        header1Label.setPrefSize(200, 50);
+        root.getChildren().add(header1Label);
+
+        //Profession
+        header3Label.setLayoutX(401);
+        header3Label.setLayoutY(0);
+        header3Label.setStyle(labelStyle);
+        header3Label.setPrefSize(200, 50);
+        root.getChildren().add(header3Label);
+
+        //Ages
+        header2Label.setLayoutX(-75);
+        header2Label.setLayoutY(275);
+        header2Label.setStyle(labelStyle);
+        header2Label.setPrefSize(200, 50);
+        header2Label.setRotate(90);
+        root.getChildren().add(header2Label);
+
+        //Profession
+        header4Label.setLayoutX(-75);
+        header4Label.setLayoutY(475);
+        header4Label.setStyle(labelStyle);
+        header4Label.setPrefSize(200, 50);
+        header4Label.setRotate(90);
+        root.getChildren().add(header4Label);
+
+
         switch (gridIndex) {
             case 0:
-                grid.setLayoutX(150);
-                grid.setLayoutY(150);
+                grid.setLayoutX(200);
+                grid.setLayoutY(200);
                 break;
             case 1:
-                grid.setLayoutX(351);
-                grid.setLayoutY(150);
+                grid.setLayoutX(401);
+                grid.setLayoutY(200);
                 break;
             case 2:
-                grid.setLayoutX(150);
-                grid.setLayoutY(351);
+                grid.setLayoutX(200);
+                grid.setLayoutY(401);
                 break;
         }
 
-        double buttonSize = 50;
-        double halfButtonSize = buttonSize / 2;
-        String labelStyle = "-fx-border-color: black; -fx-border-width: 2; -fx-padding: 4 4 4 4; -fx-background-color: white; -fx-alignment: center;";
+
+
 
         for (int i = 0; i < 4; i++) {
             if (gridIndex == 0 || gridIndex == 2) {
                 Label rowLabel = new Label("Row " + (i + 1));
                 rowLabel.setPrefSize(150, 50);
-                rowLabel.setLayoutX(50); // Adjust this if needed
-                rowLabel.setLayoutY(grid.getLayoutY() + i * buttonSize );
+
+                rowLabel.setLayoutX(50);
+                rowLabel.setLayoutY(grid.getLayoutY() + i * 50);
+
                 rowLabel.setStyle(labelStyle);
                 root.getChildren().add(rowLabel);
             }
             if (gridIndex == 0 || gridIndex == 1) {
                 Label colLabel = new Label("Col " + (i + 1));
-                colLabel.setPrefSize(200, 50);
-                colLabel.setLayoutX(grid.getLayoutX() + i * buttonSize + halfButtonSize - colLabel.getWidth() / 2);
-                colLabel.setLayoutY(grid.getLayoutY() - 30); // Adjust this if needed
+                colLabel.setPrefSize(150, 50);
+
+                colLabel.setLayoutX(grid.getLayoutX() + (i * 50)-50);
+                colLabel.setLayoutY(100);
+
                 colLabel.setStyle(labelStyle);
                 colLabel.setRotate(90);
                 root.getChildren().add(colLabel);
             }
         }
+
+
     }
     private void handleButtonAction(GameButton button, int gridIndex) {
         // Toggle button state
