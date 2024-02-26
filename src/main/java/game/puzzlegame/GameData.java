@@ -3,6 +3,7 @@ package game.puzzlegame;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GameData {
@@ -95,5 +96,26 @@ public class GameData {
 
     public String getHints() {
         return hints;
+    }
+
+    public void setHints(String hints) {
+        this.hints = hints;
+    }
+
+    public void setStory(String[] story) {
+        this.story = story;
+    }
+
+    @Override
+    public String toString() {
+        return "GameData{" +
+                "hints='" + hints + '\'' +
+                ", header1=" + Arrays.toString(header1) +
+                ", header2=" + Arrays.toString(header2) +
+                ", header3and4=" + Arrays.toString(header3and4) +
+                ", clues=" + Arrays.toString(clues) +
+                ", story=" + Arrays.toString(story) +
+                ", gridAnswers=" + gridAnswers +
+                '}';
     }
 }

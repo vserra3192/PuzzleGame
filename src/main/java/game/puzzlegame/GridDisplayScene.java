@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class GridDisplayScene {
@@ -348,5 +349,83 @@ public class GridDisplayScene {
 
     public Scene getScene() {
         return scene;
+    }
+
+    public GameData getGameData() {
+        return gameData;
+    }
+
+    public int getGridSize() {
+        return gridSize;
+    }
+
+    public void setGridSize(int gridSize) {
+        this.gridSize = gridSize;
+    }
+
+    public int getGridNumber() {
+        return gridNumber;
+    }
+
+    public void setGridNumber(int gridNumber) {
+        this.gridNumber = gridNumber;
+    }
+
+    public String getDifficultyLevel() {
+        return difficultyLevel;
+    }
+
+    public void setDifficultyLevel(String difficultyLevel) {
+        this.difficultyLevel = difficultyLevel;
+    }
+
+    public ArrayList<String[]> getAnswerSheets() {
+        return answerSheets;
+    }
+
+    public ArrayList<GridPane> getGridPanes() {
+        return gridPanes;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GridDisplayScene that = (GridDisplayScene) o;
+
+        if (gridSize != that.gridSize) return false;
+        if (gridNumber != that.gridNumber) return false;
+        if (!Objects.equals(hintLabel, that.hintLabel)) return false;
+        if (!Objects.equals(mainApp, that.mainApp)) return false;
+        if (!Objects.equals(gameOverButton, that.gameOverButton))
+            return false;
+        if (!Objects.equals(gameData, that.gameData)) return false;
+        if (!Objects.equals(scene, that.scene)) return false;
+        if (!Objects.equals(difficultyLevel, that.difficultyLevel))
+            return false;
+        if (!Objects.equals(answerSheets, that.answerSheets)) return false;
+        return Objects.equals(gridPanes, that.gridPanes);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = gameData != null ? gameData.hashCode() : 0;
+        result = 31 * result + gridSize;
+        result = 31 * result + gridNumber;
+        result = 31 * result + (difficultyLevel != null ? difficultyLevel.hashCode() : 0);
+        result = 31 * result + (answerSheets != null ? answerSheets.hashCode() : 0);
+        result = 31 * result + (gridPanes != null ? gridPanes.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "GridDisplayScene{" +
+                "gameData=" + gameData +
+                ", gridSize=" + gridSize +
+                ", gridNumber=" + gridNumber +
+                ", difficultyLevel='" + difficultyLevel + '\'' +
+                '}';
     }
 }
