@@ -5,6 +5,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+/**
+ * This Class is used to read the GameData.txt File to find all the parameters
+ * and data used in the game. It reads each line in the GameData file and
+ * places them into a List of Strings.
+ * @Author Victor, Ramiz, Jin
+ */
 
 public class GameData {
     private String hints;
@@ -15,13 +21,6 @@ public class GameData {
     private String[] story;
     private ArrayList<Integer[]> gridAnswers = new ArrayList<>();
 
-    /**
-     * This Class is used to read the GameData.txt File to find all the parameters
-     * and data used in the game. It reads each line in the GameData file and
-     * places them into a List of Strings.
-     * @param filePath
-     */
-
     public GameData(String filePath) {
         try {
             List<String> lines = Files.readAllLines(Paths.get(filePath));
@@ -31,12 +30,11 @@ public class GameData {
         }
     }
 
-    /**
+    /*
      * This Method takes the list of strings and reads through each line.
      * depending on its starting value, it trims the rest of the line and
      * places it into a corresponding attribute (either and array of string or
      * just a string). Which are used in the GridDisplayScene Class.
-     * @param lines
      */
     private void parseData(List<String> lines) {
         for (String line : lines) {

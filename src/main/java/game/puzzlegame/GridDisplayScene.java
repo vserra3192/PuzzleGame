@@ -1,6 +1,5 @@
 package game.puzzlegame;
 
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -12,7 +11,15 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.Objects;
 
-
+/**
+ * This class is called after the player presses the create puzzle button in the "main menu."
+ * It Creates a grid taking in the parameters the user chose within the main menu. It creates the text
+ * area with the different tabs (Clues, Story, Notes). As well as the buttons and their functionalities
+ * (Start Over, Hint, Check Answers).
+ * This Class also takes the Data that the GameData method read from the GameDataXXXX.txt file and populates
+ * the grid with that data (answers, clues, story, etc...).
+ * @Author Victor, Ramiz, Jin
+ */
 public class GridDisplayScene {
     private Label hintLabel = new Label();
 
@@ -102,10 +109,9 @@ public class GridDisplayScene {
         scene = new Scene(root, 1000, 700);
     }
 
-    /**
+    /*
      * Method is called when Start Over Button is clicked. Iterates through each GameButton in
      * each grid and clears the text and makes them clickable.
-     * @Author Victor Serra
      */
     private void startOver() {
         for (GridPane grids: gridPanes){
@@ -127,7 +133,7 @@ public class GridDisplayScene {
         }
     }
 
-    /**
+    /*
      * Creates the number of answer sheets that is needed to compare user given answers to
      * the correct answers.
      * @param gridNumber
@@ -146,11 +152,9 @@ public class GridDisplayScene {
         fillAnswers(answerSheets);
     }
 
-    /**
+    /*
      * This method will take the location of the correct answers from the GameData file
      * and add it to the answerSheets given in the parameter.
-     * @param answerSheets
-     * @Author Victor Serra
      */
     private void fillAnswers(ArrayList<String[]> answerSheets){
         for (int gridNum = 0; gridNum < gridNumber; gridNum++) {
@@ -160,12 +164,11 @@ public class GridDisplayScene {
             answerSheets.get(gridNum)[gameData.getGridAnswers().get(gridNum)[3]] = "O";
         }
     }
-    /**
+    /*
      * called when clear errors button is clicked. for each button in the grid,
      * it compares its text value to the answerSheet array
      * and clears the answers if they are incorrect. Or, if all answers are correct,
      * it displays a button which restarts the game.
-     * @Author Victor Serra
      */
     private void clearErrors() {
         int correctAnswers = 0;
@@ -192,7 +195,7 @@ public class GridDisplayScene {
         }
     }
 
-    /**
+    /*
      * This method is called when the gameOver button is pressed.
      * Restarts the game
      */

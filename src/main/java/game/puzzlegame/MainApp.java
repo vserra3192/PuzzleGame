@@ -3,6 +3,13 @@ package game.puzzlegame;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/**
+ * Where the start method is located. Where the two scenes (PuzzleCreatorScene and GridDisplayScene)
+ * are placed in the main stage after clicking the CreatePuzzle button and/or when the user beats
+ * the puzzle and wants to restart.
+ * @Author Victor, Ramiz, Jin
+ */
+
 public class MainApp extends Application {
     private Stage primaryStage;
 

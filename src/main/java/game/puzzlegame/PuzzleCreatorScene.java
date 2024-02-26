@@ -14,6 +14,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
+/**
+ * Creates The "Main Menu" Where the user can select the size and difficulty of they game.
+ * @Author Victor, Ramiz, Jin
+ */
 
 public class PuzzleCreatorScene {
     private Scene scene;
@@ -22,11 +26,6 @@ public class PuzzleCreatorScene {
     private ChoiceBox<String> gridSizeChoiceBox;
     private ChoiceBox<String> difficultyChoiceBox;
 
-    /**
-     * Creates The "Main Menu" Where the user can select the size and difficulty of they game.
-     * @param mainApp
-     * @Author Ramiz
-     */
     public PuzzleCreatorScene(MainApp mainApp) {
         this.mainApp = mainApp;
         this.gridSizeChoiceBox = new ChoiceBox<>();
@@ -38,10 +37,9 @@ public class PuzzleCreatorScene {
         root.setCenter(centerBox);
         this.scene = new Scene(root, 600, 400);
     }
-    /**
+    /*
      * Sets up the location of the text, buttons and drop down menu.
      * as well as the options for the two drop down menus
-     * @Author Ramiz
      */
     private VBox setupCenterBox() {
         VBox centerBox = new VBox(20);
